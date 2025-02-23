@@ -32,3 +32,6 @@ build-backend = "hatchling.build"
 
 [tool.hatch.version]
 path = "src/rogue_scroll/__about__.py"
+
+[tool.ruff]
+line-length = 80

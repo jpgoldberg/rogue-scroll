@@ -87,38 +87,28 @@ parser.add_argument(
     default=DEFAULT_BIG_K,
     help="only show kind of scroll",
 )
-parser.add_argument("--entropy", "-H", help="compute entropy", action="store_true")
+parser.add_argument(
+    "--entropy", "-H", help="compute entropy", action="store_true"
+)
 
 
 def main() -> None:
     args = parser.parse_args()
-    syllables = MinMax(args.min_syllables, args.max_syllables)
-    words = MinMax(args.min_words, args.max_words)
-
-    # The functions we call will throw TypeErrors if these
-    # conditions aren't met, but we can produce more helpful errors
-    # here in main()
-    if not is_min_max(syllables):
-        raise ValueError(
-            f"minimum number of syllables ({syllables.min}) can't be"
-            f"greater than maximum ({syllables.max})"
-        )
-
-    if not is_min_max(words):
-        raise ValueError(
-            f"minimum number of words ({words.min}) can't be"
-            f"greater than maximum ({words.max})"
-        )
 
     if args.n < 0:
         raise ValueError(f"You owe me {-args.n} scroll titles.")
+
+    s_min = args.min_syllables
+    s_max = args.max_syllables
+    w_min = args.min_words
+    w_max = args.max_words
 
     for _ in range(args.n):
         kind = ""
         title = ""
         output = ""
         if not args.K:
-            title = Scroll.generate_title(syllables, words)
+            title = Scroll.generate_title(s_min, s_max, w_min, w_max)
         if args.k or args.K:
             kind = Scroll.choose()
         match args.k, args.K:
@@ -131,7 +121,7 @@ def main() -> None:
         print(output)
 
     if args.entropy:
-        print(Scroll.entropy(syllables, words))
+        print(Scroll.entropy(s_min, s_max, w_min, w_max))
 
 
 if __name__ == "__main__":
