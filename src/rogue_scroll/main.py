@@ -17,7 +17,7 @@ if sys.version_info < (3, 10):
     raise RuntimeError("This requires Python 3.10+")
 
 import argparse
-from rogue_scroll.scroll import Scroll, is_min_max, MinMax
+from rogue_scroll.scroll import Scroll
 from rogue_scroll.__about__ import __version__, __copyright__
 
 

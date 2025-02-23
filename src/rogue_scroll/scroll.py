@@ -17,36 +17,6 @@ from itertools import accumulate
 
 import secrets  # we will not use the RNG from original rogue.
 import math
-from typing import NamedTuple, TypeGuard
-
-
-class MinMax(NamedTuple):
-    """Minimum and maximum"""
-
-    min: int
-    max: int
-
-
-def is_min_max(mm: tuple[int, int]) -> TypeGuard[MinMax]:
-    if not isinstance(mm, tuple):
-        return False
-    if len(mm) != 2:
-        return False
-    if not (isinstance(mm[0], int) and isinstance(mm[1], int)):
-        return False
-    if mm[1] < mm[0]:
-        return False
-    return True
-
-
-def rand_in_range(r: MinMax) -> int:
-    """Return a uniformly chosen random in [bottom, top] inclusive."""
-
-    diff = r.max - r.min
-    if diff == 0:
-        return r.min
-
-    return secrets.randbelow(diff + 1) + r.min
 
 
 def count_possibilities(n: int, min: int, max: int) -> int:
@@ -57,7 +27,9 @@ def count_possibilities(n: int, min: int, max: int) -> int:
     """
 
     if min > max:
-        raise ValueError(f"Minimum ({min}) can't be greater than maximum ({max}).")
+        raise ValueError(
+            f"Minimum ({min}) can't be greater than maximum ({max})."
+        )
 
     if n < 1:
         raise ValueError("n must be positive")
@@ -153,7 +125,11 @@ class Scroll:
 
     @classmethod
     def generate_title(
-        cls, min_syllables: int, max_syllables, min_words: int, max_words: int
+        cls,
+        min_syllables: int,
+        max_syllables: int,
+        min_words: int,
+        max_words: int,
     ) -> str:
         """Generate a scroll title
 
@@ -207,11 +183,11 @@ class Scroll:
     def _count_possibilities(n: int, min: int, max: int) -> int:
         """:math:`\\sum_{x=min}^{max} n^x`
 
-        :raises ValueError: if max > min.
+        :raises ValueError: if min > max.
         :raise ValueError: if n < 1.
         """
 
-        if not is_min_max((min, max)):
+        if max < min:
             raise ValueError("Minimum can't be greater than maximum.")
 
         if n < 1:
