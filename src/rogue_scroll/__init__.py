@@ -1,2 +1,1 @@
-def main() -> None:
-    print("Hello from rogue-scroll!")
+from .scroll import Scroll as Scroll

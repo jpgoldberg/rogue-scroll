@@ -1,6 +1,6 @@
 [project]
 name = "rogue-scroll"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Generate scroll titles from the game rogue"
 readme = "README.md"
 license = "CC-BY-ND-4.0"
@@ -14,10 +14,13 @@ maintainers = [
 requires-python = ">=3.10"
 dependencies = []
 
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+]
+
 [project.urls]
 Repository = "https://github.com/jpgoldberg/rogue-scroll.git"
 Issues = "https://github.com/jpgoldberg/rogue-scroll/issues"
-
 
 
 [project.scripts]
@@ -26,3 +29,6 @@ rogue-scroll = "rogue_scroll:main"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "src/rogue_scroll/__about__.py"
