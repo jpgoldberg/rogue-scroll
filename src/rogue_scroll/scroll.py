@@ -101,8 +101,24 @@ class Scroll:
     DEFAULT_MIN_W = 2  # Minimum words per title
     DEFAULT_MAX_W = 4  # Maximum words per title
 
+    def __init__(
+        self,
+        min_syllables: int = DEFAULT_MIN_S,
+        max_syllables: int = DEFAULT_MAX_S,
+        min_words: int = DEFAULT_MIN_W,
+        max_words: int = DEFAULT_MAX_W,
+    ) -> None:
+        self._s_max = max(min_syllables, max_syllables)
+        self._s_min = min_syllables
+        self._w_max = max(min_words, max_words)
+        self._w_min = min_words
+
+        # Inclusive differences
+        self._s_diff = (self._s_max - self._s_min) + 1
+        self._w_diff = (self._w_max - self._w_min) + 1
+
     @classmethod
-    def cumulative(cls) -> list[int]:
+    def _cumulative(cls) -> list[int]:
         if cls._breakpoints is None:
             c = list(accumulate(cls.SCROLLS.values()))
             base = c.pop(0)
@@ -114,7 +130,7 @@ class Scroll:
     def choose(cls) -> str:
         """Randomly picks a scroll using weighted probabilities."""
 
-        breakpoints: list[int] = cls.cumulative()
+        breakpoints: list[int] = cls._cumulative()
         scroll_types: list[str] = list(cls.SCROLLS.keys())
         assert cls._max_prob is not None  # for type narrowing
         assert len(breakpoints) == len(scroll_types) - 1
@@ -123,57 +139,34 @@ class Scroll:
         i = bisect(breakpoints, score)
         return scroll_types[i]
 
-    @classmethod
-    def generate_title(
-        cls,
-        min_syllables: int,
-        max_syllables: int,
-        min_words: int,
-        max_words: int,
-    ) -> str:
-        """Generate a scroll title
-
-        Each title is composed of a number of words,
-        each of which is composed of a number of syllables.
-        The numbers of words per title and syllables per word
-        is determined by the parameters.
-
-        Parameters
-        ----------
-        :param min_syllables: Minimum syllables per word
-        :param max_syllables: Maximum syllables per word
-        :param min_words: Minimum words per title
-        :param max_words: Maximum words per title
-
-        Returns
-        -------
-        str
-            A scroll title
-        """
+    def random_title(self) -> str:
+        """Generate random scroll title."""
 
         n_words: int
-        if min_words >= max_words:
-            n_words = min_words
+        if self._w_diff == 1:
+            n_words = self._w_min
         else:
-            n_words = secrets.randbelow((max_words - min_words) + 1) + min_words
+            n_words = secrets.randbelow(self._w_diff) + self._w_min
 
         # If the number of syllables will be fixed as a single number,
         # we only compute that once.
-        n_syllables: int | None  # I wish PEP 661 was adopted
-        inclusive_diff = 0
-        if min_syllables >= max_syllables:
-            n_syllables = min_syllables
+        fixed_n_syl = False
+        n_syllables = -1  # I wish PEP 661 was adopted
+        if self._s_diff == 1:
+            n_syllables = self._s_min
+            fixed_n_syl = True
         else:
-            inclusive_diff = (max_syllables - min_syllables) + 1
-            n_syllables = None
+            # We will need to compute n_syllables for each word in the
+            # loop below.
+            fixed_n_syl = False
 
         words: list[str] = []
         for w in range(n_words):
-            if not n_syllables:
-                n_syllables = secrets.randbelow(inclusive_diff) + min_syllables
+            if not fixed_n_syl:
+                n_syllables = secrets.randbelow(self._s_diff) + self._s_min
             word = ""
             for s in range(n_syllables):
-                syl = cls.SYLLABLES[secrets.randbelow(len(cls.SYLLABLES))]
+                syl = self.SYLLABLES[secrets.randbelow(len(self.SYLLABLES))]
                 word += syl
 
             words.append(word)
@@ -198,22 +191,15 @@ class Scroll:
             total += n**length
         return total
 
-    @classmethod
-    def entropy(
-        cls,
-        min_syllables: int,
-        max_syllables: int,
-        min_words: int,
-        max_words: int,
-    ) -> float:
+    def entropy(self) -> float:
         """Entropy in bits given numbers of syllables per word, words per title."""
 
         # This code assumes that the maximum number of syllables per words
         # and words per syllables will remain small.
         # With larger numbers there would be more efficient ways to do this.
         words = count_possibilities(
-            len(cls.SYLLABLES), min_syllables, max_syllables
+            len(self.SYLLABLES), self._s_min, self._s_max
         )
-        titles = count_possibilities(words, min_words, max_words)
+        titles = count_possibilities(words, self._w_min, self._w_max)
 
         return math.log2(titles)

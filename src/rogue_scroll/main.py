@@ -17,7 +17,7 @@ if sys.version_info < (3, 10):
     raise RuntimeError("This requires Python 3.10+")
 
 import argparse
-from rogue_scroll.scroll import Scroll
+from rogue_scroll import Scroll
 from rogue_scroll.__about__ import __version__, __copyright__
 
 
@@ -98,17 +98,16 @@ def main() -> None:
     if args.n < 0:
         raise ValueError(f"You owe me {-args.n} scroll titles.")
 
-    s_min = args.min_syllables
-    s_max = args.max_syllables
-    w_min = args.min_words
-    w_max = args.max_words
+    generator = Scroll(
+        args.min_syllables, args.max_syllables, args.min_words, args.max_words
+    )
 
     for _ in range(args.n):
         kind = ""
         title = ""
         output = ""
         if not args.K:
-            title = Scroll.generate_title(s_min, s_max, w_min, w_max)
+            title = generator.random_title()
         if args.k or args.K:
             kind = Scroll.choose()
         match args.k, args.K:
@@ -121,7 +120,7 @@ def main() -> None:
         print(output)
 
     if args.entropy:
-        print(Scroll.entropy(s_min, s_max, w_min, w_max))
+        print(generator.entropy())
 
 
 if __name__ == "__main__":
