@@ -1,13 +1,24 @@
 [project]
 name = "rogue-scroll"
 version = "0.1.0"
-description = "Add your description here"
+description = "Generate scroll titles from the game rogue"
 readme = "README.md"
+license = "CC-BY-ND-4.0"
 authors = [
+    { name = "Jeffrey Goldberg", email = "jeffrey@goldmark.org" },
+    { name = "1Password Inc" }
+]
+maintainers = [
     { name = "Jeffrey Goldberg", email = "jeffrey@goldmark.org" }
 ]
-requires-python = ">=3.12"
+requires-python = ">=3.10"
 dependencies = []
+
+[project.urls]
+Repository = "https://github.com/jpgoldberg/rogue-scroll.git"
+Issues = "https://github.com/jpgoldberg/rogue-scroll/issues"
+
+
 
 [project.scripts]
 rogue-scroll = "rogue_scroll:main"

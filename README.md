@@ -17,12 +17,5 @@ This tool also provides a mechanism to pick the kinds of scrolls using the same 
 
 ## License
 
-The earliest version of this was written when I was an employee of 1Password, Inc
-(then AgileBits, Inc) which still retains copyright to that and derivative works.
-I have been granted the right to publish and create derivative works of this and some
-other projects, but I cannot fully open-source the material.
-Therefore I cannot accept pull requests for this,
-although I can respond to issues.
-That is, all development of this must.
-So roughly you can use it with attribution,
-but only I and 1Password, Inc have to right to modify it.
+Released under [Creative Commons Attribution-Noderivatives version 4.0 license](https://creativecommons.org/licenses/by-nd/4.0/).
+Copyright AgileBits, Inc. 2022; Jeffrey Goldberg 2024–2025.
