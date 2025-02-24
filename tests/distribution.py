@@ -4,8 +4,8 @@ It should not be run as part of any automated thing.
 """
 
 from rogue_scroll import Scroll
-import seaborn as sns
 import pandas as pd
+from scipy import stats
 
 
 def scroll_historgram(trials: int = 1000) -> dict[str, int]:
@@ -17,24 +17,50 @@ def scroll_historgram(trials: int = 1000) -> dict[str, int]:
     return hist
 
 
-def data_prep(hist: dict[str, int]) -> pd.DataFrame:
-    prob_total = sum(Scroll.SCROLLS.values())
-    trials = sum(hist.values())
-    multiplier = trials / prob_total
-    expected = {s: p * multiplier for s, p in Scroll.SCROLLS.items()}
+class DistData:
+    def __init__(self, hist: dict[str, int]) -> None:
+        prob_total = sum(Scroll.SCROLLS.values())
+        trials = sum(hist.values())
+        multiplier = trials / prob_total
+        expected = {s: p * multiplier for s, p in Scroll.SCROLLS.items()}
 
-    d: dict[str, list[float]] = {s: [hist[s], expected[s]] for s in hist}
-    df = pd.DataFrame.from_dict(
-        data=d, orient="index", columns=["actual", "expected"]
-    )
-    return df
+        self.data: dict[str, tuple[int, float]] = {
+            s: (hist[s], expected[s]) for s in hist
+        }
+
+    def as_dataframe(self) -> pd.DataFrame:
+        df = pd.DataFrame.from_dict(
+            data=self.data, orient="index", columns=["actual", "expected"]
+        )
+        return df
+
+    def __str__(self) -> str:
+        return str(self.as_dataframe())
+
+    def ks(self) -> tuple[float, float]:
+        """Returns (statistic, pvalue) from ks_2samp test.
+
+        The p-values treat the null hypothesis as distributions are identical.
+        """
+        counts: list[int] = []
+        expectations: list[float] = []
+        for c, e in self.data.values():
+            counts.append(c)
+            expectations.append(e)
+        res = stats.ks_2samp(
+            counts, expectations, alternative="two-sided", method="auto"
+        )
+
+        return res.statistic, res.pvalue
 
 
 def main() -> None:
-    hist = scroll_historgram(10_000)
-    df = data_prep(hist)
+    hist = scroll_historgram(100_000)
+    data = DistData(hist)
 
-    print(df)
+    print(data)
+    p = 1.0 - data.ks()[1]
+    print(f"p-value: {p:.4g}")
 
 
 if __name__ == "__main__":

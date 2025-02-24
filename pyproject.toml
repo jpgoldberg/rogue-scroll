@@ -12,13 +12,26 @@ maintainers = [
     { name = "Jeffrey Goldberg", email = "jeffrey@goldmark.org" }
 ]
 requires-python = ">=3.10"
-dependencies = [
-    "pandas-stubs>=2.2.3.241126",
-    "seaborn>=0.13.2",
-]
+dependencies = []
 
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
+]
+
+[dependency-groups]
+dev = [
+  "pytest"
+]
+lint = [
+  "ruff",
+  "mypy",
+]
+stats = [
+    "pandas>=2.2.3",
+    "pandas-stubs>=2.2.3.241126",
+    "scipy>=1.15.2",
+    "scipy-stubs>=1.15.2.0",
+    "seaborn>=0.13.2",
 ]
 
 [project.urls]
