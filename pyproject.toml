@@ -5,8 +5,7 @@ description = "Generate scroll titles from the game rogue"
 readme = "README.md"
 license = "CC-BY-ND-4.0"
 authors = [
-    { name = "Jeffrey Goldberg", email = "jeffrey@goldmark.org" },
-    { name = "1Password Inc" }
+    { name = "Jeffrey Goldberg", email = "jeffrey@goldmark.org" }
 ]
 maintainers = [
     { name = "Jeffrey Goldberg", email = "jeffrey@goldmark.org" }
@@ -40,7 +39,7 @@ Issues = "https://github.com/jpgoldberg/rogue-scroll/issues"
 
 
 [project.scripts]
-rogue-scroll = "rogue_scroll:main"
+rogue-scroll = "rogue_scroll.__main__:main"
 
 [build-system]
 requires = ["hatchling"]
