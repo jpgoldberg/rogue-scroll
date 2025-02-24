@@ -130,14 +130,19 @@ class Scroll:
     def choose(cls) -> str:
         """Randomly picks a scroll using weighted probabilities."""
 
-        breakpoints: list[int] = cls._cumulative()
-        scroll_types: list[str] = list(cls.SCROLLS.keys())
-        assert cls._max_prob is not None  # for type narrowing
-        assert len(breakpoints) == len(scroll_types) - 1
-
-        score = secrets.randbelow(cls._max_prob) + 1
-        i = bisect(breakpoints, score)
-        return scroll_types[i]
+        # largely lifted from
+        # https://github.com/python/cpython/blob/bbfae4a912f021be44f270a63565a0bc2d156e9f/Lib/random.py#L458
+        # But we are dealing with integers only,
+        # and I am using lots of intermediate variables
+        population = list(cls.SCROLLS.keys())
+        n = len(population)
+        weights = cls.SCROLLS.values()
+        cum_weights = list(accumulate(weights))
+        total = cum_weights[-1]
+        hi = n - 1
+        r = secrets.randbelow(total)
+        position = bisect(cum_weights, r, 0, hi)
+        return population[position]
 
     def random_title(self) -> str:
         """Generate random scroll title."""

@@ -12,7 +12,10 @@ maintainers = [
     { name = "Jeffrey Goldberg", email = "jeffrey@goldmark.org" }
 ]
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "pandas-stubs>=2.2.3.241126",
+    "seaborn>=0.13.2",
+]
 
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
