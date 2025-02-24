@@ -11,9 +11,9 @@ Scrolls in the game had titles like
 This file can also be imported as a module
 """
 
-# NamedTuple type hints come with python 3.6. TypeGuard with 3.10.
 from bisect import bisect
 from itertools import accumulate
+from typing import NamedTuple
 
 import secrets  # we will not use the RNG from original rogue.
 import math
@@ -22,8 +22,11 @@ import math
 def count_possibilities(n: int, min: int, max: int) -> int:
     """:math:`\\sum_{x=min}^{max} n^x`
 
+    If n is 0 this will return 0. Keep that in mind if you
+    ever want to take the logarithm of the result.
+
     :raises ValueError: if min > max.
-    :raise ValueError: if n < 1.
+    :raises ValueError: if n < 0
     """
 
     if min > max:
@@ -31,13 +34,20 @@ def count_possibilities(n: int, min: int, max: int) -> int:
             f"Minimum ({min}) can't be greater than maximum ({max})."
         )
 
-    if n < 1:
-        raise ValueError("n must be positive")
+    if n < 0:
+        raise ValueError("n cannot be negative")
 
     total = 0
     for length in range(min, max + 1):
         total += n**length
     return total
+
+
+class _PreComputed(NamedTuple):
+    scroll_types: list[str]
+    cum_weights: list[int]
+    hi: int
+    total: int
 
 
 class Scroll:
@@ -92,8 +102,7 @@ class Scroll:
     """
 
     # None is used as a sentinel for not yet computed
-    _breakpoints: list[int] | None = None
-    _max_prob: int | None = None
+    _precomp: _PreComputed | None = None
 
     # Defaults taken from hardcoded values in rogue source.
     DEFAULT_MIN_S = 1  # Minimum syllables per word
@@ -118,13 +127,21 @@ class Scroll:
         self._w_diff = (self._w_max - self._w_min) + 1
 
     @classmethod
-    def _cumulative(cls) -> list[int]:
-        if cls._breakpoints is None:
-            c = list(accumulate(cls.SCROLLS.values()))
-            base = c.pop(0)
-            cls._breakpoints = list(map(lambda x: x - base, c))
-            cls._max_prob = sum(cls.SCROLLS.values())
-        return cls._breakpoints
+    def _precompute_choose(cls) -> _PreComputed:
+        if cls._precomp is None:
+            scroll_types = list(cls.SCROLLS.keys())
+            weights = cls.SCROLLS.values()
+            cum_weights = list(accumulate(weights))
+            total = cum_weights[-1]
+            hi = len(scroll_types) - 1
+
+            cls._precomp = _PreComputed(
+                scroll_types=scroll_types,
+                cum_weights=cum_weights,
+                total=total,
+                hi=hi,
+            )
+        return cls._precomp
 
     @classmethod
     def choose(cls) -> str:
@@ -134,15 +151,12 @@ class Scroll:
         # https://github.com/python/cpython/blob/bbfae4a912f021be44f270a63565a0bc2d156e9f/Lib/random.py#L458
         # But we are dealing with integers only,
         # and I am using lots of intermediate variables
-        population = list(cls.SCROLLS.keys())
-        n = len(population)
-        weights = cls.SCROLLS.values()
-        cum_weights = list(accumulate(weights))
-        total = cum_weights[-1]
-        hi = n - 1
-        r = secrets.randbelow(total)
-        position = bisect(cum_weights, r, 0, hi)
-        return population[position]
+
+        pc = cls._precompute_choose()
+
+        r = secrets.randbelow(pc.total)
+        position = bisect(pc.cum_weights, r, 0, pc.hi)
+        return pc.scroll_types[position]
 
     def random_title(self) -> str:
         """Generate random scroll title."""
@@ -197,7 +211,10 @@ class Scroll:
         return total
 
     def entropy(self) -> float:
-        """Entropy in bits given numbers of syllables per word, words per title."""
+        """Entropy in bits.
+
+        :raises ValueError: if no titles would be possible
+        """
 
         # This code assumes that the maximum number of syllables per words
         # and words per syllables will remain small.
@@ -207,4 +224,9 @@ class Scroll:
         )
         titles = count_possibilities(words, self._w_min, self._w_max)
 
-        return math.log2(titles)
+        try:
+            H = math.log2(titles)
+        except ValueError:
+            raise
+
+        return math.log2(H)
