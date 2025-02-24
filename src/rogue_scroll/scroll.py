@@ -19,30 +19,6 @@ import secrets  # we will not use the RNG from original rogue.
 import math
 
 
-def count_possibilities(n: int, min: int, max: int) -> int:
-    """:math:`\\sum_{x=min}^{max} n^x`
-
-    If n is 0 this will return 0. Keep that in mind if you
-    ever want to take the logarithm of the result.
-
-    :raises ValueError: if min > max.
-    :raises ValueError: if n < 0
-    """
-
-    if min > max:
-        raise ValueError(
-            f"Minimum ({min}) can't be greater than maximum ({max})."
-        )
-
-    if n < 0:
-        raise ValueError("n cannot be negative")
-
-    total = 0
-    for length in range(min, max + 1):
-        total += n**length
-    return total
-
-
 class _PreComputed(NamedTuple):
     scroll_types: list[str]
     cum_weights: list[int]
@@ -74,6 +50,9 @@ class Scroll:
     # spell-checker: enable
     """Syllables taken from rogue source."""
 
+    N_SYLLABLES = len(SYLLABLES)
+    """Number of distinct syllables."""
+
     # name and probability fields from scr_info in
     #  https://github.com/Davidslv/rogue/blob/master/extern.c
     SCROLLS: dict[str, int] = {
@@ -101,6 +80,9 @@ class Scroll:
     Probabilities are chance out of 100.
     """
 
+    N_SCROLLS = len(SCROLLS)
+    """Number of different scrolls"""
+
     # None is used as a sentinel for not yet computed
     _precomp: _PreComputed | None = None
 
@@ -126,14 +108,17 @@ class Scroll:
         self._s_diff = (self._s_max - self._s_min) + 1
         self._w_diff = (self._w_max - self._w_min) + 1
 
+        self._entropy: float | None = None
+
     @classmethod
     def _precompute_choose(cls) -> _PreComputed:
+        """Precomputes things that will be used in every call to choose()"""
         if cls._precomp is None:
             scroll_types = list(cls.SCROLLS.keys())
             weights = cls.SCROLLS.values()
             cum_weights = list(accumulate(weights))
             total = cum_weights[-1]
-            hi = len(scroll_types) - 1
+            hi = cls.N_SCROLLS - 1
 
             cls._precomp = _PreComputed(
                 scroll_types=scroll_types,
@@ -185,15 +170,18 @@ class Scroll:
                 n_syllables = secrets.randbelow(self._s_diff) + self._s_min
             word = ""
             for s in range(n_syllables):
-                syl = self.SYLLABLES[secrets.randbelow(len(self.SYLLABLES))]
+                syl = self.SYLLABLES[secrets.randbelow(self.N_SYLLABLES)]
                 word += syl
 
             words.append(word)
         return " ".join(words)
 
     @staticmethod
-    def _count_possibilities(n: int, min: int, max: int) -> int:
+    def count_possibilities(n: int, min: int, max: int) -> int:
         """:math:`\\sum_{x=min}^{max} n^x`
+
+        Note that this can return 0. Keep that in mind if you wish to
+        take the logarithm of the result.
 
         :raises ValueError: if min > max.
         :raise ValueError: if n < 1.
@@ -216,17 +204,21 @@ class Scroll:
         :raises ValueError: if no titles would be possible
         """
 
+        if self._entropy is not None:
+            return self._entropy
+
         # This code assumes that the maximum number of syllables per words
         # and words per syllables will remain small.
         # With larger numbers there would be more efficient ways to do this.
-        words = count_possibilities(
-            len(self.SYLLABLES), self._s_min, self._s_max
+        words = self.count_possibilities(
+            self.N_SYLLABLES, self._s_min, self._s_max
         )
-        titles = count_possibilities(words, self._w_min, self._w_max)
+        titles = self.count_possibilities(words, self._w_min, self._w_max)
 
         try:
             H = math.log2(titles)
         except ValueError:
             raise
 
-        return math.log2(H)
+        self._entropy = H
+        return self._entropy
