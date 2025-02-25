@@ -29,9 +29,11 @@ class DistData:
         }
 
     def as_dataframe(self) -> pd.DataFrame:
-        df = pd.DataFrame.from_dict(
-            data=self.data, orient="index", columns=["actual", "expected"]
-        )
+        d: dict[str, list[str | float]] = dict()
+        d["scroll_type"] = [s for s in self.data.keys()]
+        d["count"] = [v[0] for v in self.data.values()]
+        d["expected"] = [v[1] for v in self.data.values()]
+        df = pd.DataFrame(d)
         return df
 
     def __str__(self) -> str:
@@ -55,7 +57,7 @@ class DistData:
 
 
 def main() -> None:
-    hist = scroll_historgram(100_000)
+    hist = scroll_historgram(10_000)
     data = DistData(hist)
 
     print(data)
