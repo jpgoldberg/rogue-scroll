@@ -5,6 +5,8 @@ It should not be run as part of any automated thing.
 
 from rogue_scroll import Scroll
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 from scipy import stats
 
 
@@ -28,16 +30,30 @@ class DistData:
             s: (hist[s], expected[s]) for s in hist
         }
 
-    def as_dataframe(self) -> pd.DataFrame:
+        self._df_wide: pd.DataFrame | None = None
+        self._df_long: pd.DataFrame | None = None
+
+    @property
+    def df_wide(self) -> pd.DataFrame:
+        if self._df_wide is not None:
+            return self._df_wide
         d: dict[str, list[str | float]] = dict()
         d["scroll_type"] = [s for s in self.data.keys()]
         d["count"] = [v[0] for v in self.data.values()]
         d["expected"] = [v[1] for v in self.data.values()]
-        df = pd.DataFrame(d)
-        return df
+        self._df_wide = pd.DataFrame(d)
+        return self._df_wide
+
+    @property
+    def df_long(self) -> pd.DataFrame:
+        if self._df_long is not None:
+            return self._df_long
+        d = self.df_wide
+        self._df_long = pd.melt(frame=d, id_vars=["scroll_type"])
+        return self._df_long
 
     def __str__(self) -> str:
-        return str(self.as_dataframe())
+        return str(self.df_wide)
 
     def ks(self) -> tuple[float, float]:
         """Returns (statistic, pvalue) from ks_2samp test.
@@ -55,6 +71,20 @@ class DistData:
 
         return res.statistic, res.pvalue
 
+    def plot(self) -> sns.FacetGrid:
+        g = sns.catplot(
+            data=self.df_long,
+            kind="bar",
+            y="scroll_type",
+            x="value",
+            hue="variable",
+        )
+        g.despine(left=True)
+        g.set_axis_labels("Count", "")
+        g.legend.set_title("")
+
+        return g
+
 
 def main() -> None:
     hist = scroll_historgram(10_000)
@@ -63,6 +93,9 @@ def main() -> None:
     print(data)
     p = 1.0 - data.ks()[1]
     print(f"p-value: {p:.4g}")
+
+    data.plot()
+    plt.show()
 
 
 if __name__ == "__main__":
