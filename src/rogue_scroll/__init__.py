@@ -1,1 +1,1 @@
-from .scroll import Scroll as Scroll
+from .scroll import Generator as Generator

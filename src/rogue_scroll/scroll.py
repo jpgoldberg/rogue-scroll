@@ -13,10 +13,67 @@ This file can also be imported as a module
 
 from bisect import bisect
 from itertools import accumulate
-from typing import NamedTuple
+from typing import NamedTuple, Optional
 
 import secrets  # we will not use the RNG from original rogue.
 import math
+
+SYLLABLES: list[str] = [
+    "a", "ab", "ag", "aks", "ala", "an", "app", "arg", "arze", "ash", "bek",
+    "bie", "bit", "bjor", "blu", "bot", "bu", "byt", "comp", "con", "cos",
+    "cre", "dalf", "dan", "den", "do", "e", "eep", "el", "eng", "er", "ere",
+    "erk", "esh", "evs", "fa", "fid", "fri", "fu", "gan", "gar", "glen", "gop",
+    "gre", "ha", "hyd", "i", "ing", "ip", "ish", "it", "ite", "iv", "jo",
+    "kho", "kli", "klis", "la", "lech", "mar", "me", "mi", "mic", "mik",
+    "mon", "mung", "mur", "nej", "nelg", "nep", "ner", "nes", "nes", "nih",
+    "nin", "o", "od", "ood", "org", "orn", "ox", "oxy", "pay", "ple", "plu",
+    "po", "pot", "prok", "re", "rea", "rhov", "ri", "ro", "rog", "rok",
+    "rol", "sa", "san", "sat",  "sef", "seh", "shu", "ski", "sna", "sne",
+    "snik", "sno", "so", "sol", "sri", "sta", "sun", "ta", "tab", "tem",
+    "ther", "ti", "tox", "trol", "tue", "turs", "u", "ulk", "um", "un", "uni",
+    "ur", "val", "viv", "vly", "vom", "wah", "wed", "werg", "wex", "whon",
+    "wun", "xo", "y", "yot", "yu", "zant", "zeb", "zim", "zok", "zon", "zum",
+]  # fmt: skip
+# spell-checker: enable
+"""Syllables taken from rogue source."""
+
+N_SYLLABLES = len(SYLLABLES)
+"""Number of distinct syllables."""
+
+# name and probability fields from scr_info in
+#  https://github.com/Davidslv/rogue/blob/master/extern.c
+SCROLL_PROBS: dict[str, int] = {
+    "monster confusion": 7,
+    "magic mapping": 4,
+    "hold monster": 2,
+    "sleep": 3,
+    "enchant armor": 7,
+    "identify potion": 10,
+    "identify scroll": 10,
+    "identify weapon": 6,
+    "identify armor": 7,
+    "identify ring, wand or staff": 10,
+    "scare monster": 3,
+    "food detection": 2,
+    "teleportation": 5,
+    "enchant weapon": 8,
+    "create monster": 4,
+    "remove curse": 7,
+    "aggravate monsters": 3,
+    "protect armor": 2,
+}
+"""Scrolls and "probabilities" taken rogue source.
+
+Probabilities are chance out of 100.
+"""
+
+SCROLL_KINDS: list[str] = list(SCROLL_PROBS.keys())
+"""List of scroll kinds"""
+
+_KIND_INDECES: dict[str, int] = {k: i for i, k in enumerate(SCROLL_KINDS)}
+
+N_SCROLLS = len(SCROLL_PROBS)
+"""Number of different scrolls"""
 
 
 class _PreComputed(NamedTuple):
@@ -27,62 +84,47 @@ class _PreComputed(NamedTuple):
 
 
 class Scroll:
+    """A scroll as a title and a kind"""
+
+    def __init__(
+        self,
+        title: str,
+        kind_index: int,
+        entropy: Optional[float] = None,
+    ) -> None:
+        self._title = title
+        if not kind_index < N_SCROLLS:
+            raise ValueError(f"kind_index must be less than {N_SCROLLS}")
+        if kind_index < 0:
+            raise ValueError("kind_index can't be negative")
+        self._kind_index = kind_index
+        self._entropy = entropy
+
+    @property
+    def title(self) -> str:
+        """Returns the title of the scroll"""
+        return self._title
+
+    @property
+    def kind(self) -> str:
+        """Returns what kind of scroll it is."""
+        return SCROLL_KINDS[self._kind_index]
+
+    @property
+    def entropy(self) -> Optional[float]:
+        """The entropy from how the scroll was generated if known
+
+        If the entropy wasn't computed when the scroll was generated
+        then this returns 'None'
+        """
+        return self._entropy
+
+
+class Generator:
     """Rogue scroll information."""
 
     # syllables from https://github.com/Davidslv/rogue/blob/master/init.c#L114
     # spell-checker: disable
-    SYLLABLES: list[str] = [
-        "a", "ab", "ag", "aks", "ala", "an", "app", "arg", "arze", "ash", "bek",
-        "bie", "bit", "bjor", "blu", "bot", "bu", "byt", "comp", "con", "cos",
-        "cre", "dalf", "dan", "den", "do", "e", "eep", "el", "eng", "er", "ere",
-        "erk", "esh", "evs", "fa", "fid", "fri", "fu", "gan", "gar", "glen", "gop",
-        "gre", "ha", "hyd", "i", "ing", "ip", "ish", "it", "ite", "iv", "jo",
-        "kho", "kli", "klis", "la", "lech", "mar", "me", "mi", "mic", "mik",
-        "mon", "mung", "mur", "nej", "nelg", "nep", "ner", "nes", "nes", "nih",
-        "nin", "o", "od", "ood", "org", "orn", "ox", "oxy", "pay", "ple", "plu",
-        "po", "pot", "prok", "re", "rea", "rhov", "ri", "ro", "rog", "rok",
-        "rol", "sa", "san", "sat",  "sef", "seh", "shu", "ski", "sna", "sne",
-        "snik", "sno", "so", "sol", "sri", "sta", "sun", "ta", "tab", "tem",
-        "ther", "ti", "tox", "trol", "tue", "turs", "u", "ulk", "um", "un", "uni",
-        "ur", "val", "viv", "vly", "vom", "wah", "wed", "werg", "wex", "whon",
-        "wun", "xo", "y", "yot", "yu", "zant", "zeb", "zim", "zok", "zon", "zum",
-    ]  # fmt: skip
-    # spell-checker: enable
-    """Syllables taken from rogue source."""
-
-    N_SYLLABLES = len(SYLLABLES)
-    """Number of distinct syllables."""
-
-    # name and probability fields from scr_info in
-    #  https://github.com/Davidslv/rogue/blob/master/extern.c
-    SCROLLS: dict[str, int] = {
-        "monster confusion": 7,
-        "magic mapping": 4,
-        "hold monster": 2,
-        "sleep": 3,
-        "enchant armor": 7,
-        "identify potion": 10,
-        "identify scroll": 10,
-        "identify weapon": 6,
-        "identify armor": 7,
-        "identify ring, wand or staff": 10,
-        "scare monster": 3,
-        "food detection": 2,
-        "teleportation": 5,
-        "enchant weapon": 8,
-        "create monster": 4,
-        "remove curse": 7,
-        "aggravate monsters": 3,
-        "protect armor": 2,
-    }
-    """Scrolls and "probabilities" taken rogue source.
-
-    Probabilities are chance out of 100.
-    """
-
-    N_SCROLLS = len(SCROLLS)
-    """Number of different scrolls"""
-
     # None is used as a sentinel for not yet computed
     _precomp: _PreComputed | None = None
 
@@ -114,11 +156,11 @@ class Scroll:
     def _precompute_choose(cls) -> _PreComputed:
         """Precomputes things that will be used in every call to choose()"""
         if cls._precomp is None:
-            scroll_types = list(cls.SCROLLS.keys())
-            weights = cls.SCROLLS.values()
+            scroll_types = list(SCROLL_PROBS.keys())
+            weights = SCROLL_PROBS.values()
             cum_weights = list(accumulate(weights))
             total = cum_weights[-1]
-            hi = cls.N_SCROLLS - 1
+            hi = N_SCROLLS - 1
 
             cls._precomp = _PreComputed(
                 scroll_types=scroll_types,
@@ -129,8 +171,8 @@ class Scroll:
         return cls._precomp
 
     @classmethod
-    def choose(cls) -> str:
-        """Randomly picks a scroll using weighted probabilities."""
+    def kind(cls) -> str:
+        """Randomly picks a scroll kind using weighted probabilities."""
 
         # largely lifted from
         # https://github.com/python/cpython/blob/bbfae4a912f021be44f270a63565a0bc2d156e9f/Lib/random.py#L458
@@ -170,11 +212,18 @@ class Scroll:
                 n_syllables = secrets.randbelow(self._s_diff) + self._s_min
             word = ""
             for s in range(n_syllables):
-                syl = self.SYLLABLES[secrets.randbelow(self.N_SYLLABLES)]
+                syl = SYLLABLES[secrets.randbelow(N_SYLLABLES)]
                 word += syl
 
             words.append(word)
         return " ".join(words)
+
+    def scroll(self, with_entropy: bool = False) -> Scroll:
+        title = self.random_title()
+        kind = self.kind()
+        k_idx = _KIND_INDECES[kind]
+        entropy = self.entropy() if with_entropy else None
+        return Scroll(title, k_idx, entropy=entropy)
 
     @staticmethod
     def count_possibilities(n: int, min: int, max: int) -> int:
@@ -210,9 +259,7 @@ class Scroll:
         # This code assumes that the maximum number of syllables per words
         # and words per syllables will remain small.
         # With larger numbers there would be more efficient ways to do this.
-        words = self.count_possibilities(
-            self.N_SYLLABLES, self._s_min, self._s_max
-        )
+        words = self.count_possibilities(N_SYLLABLES, self._s_min, self._s_max)
         titles = self.count_possibilities(words, self._w_min, self._w_max)
 
         try:

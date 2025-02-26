@@ -619,6 +619,7 @@ stats = [
     { name = "scipy" },
     { name = "scipy-stubs" },
     { name = "seaborn" },
+    { name = "types-seaborn" },
 ]
 
 [package.metadata]
@@ -635,6 +636,7 @@ stats = [
     { name = "scipy", specifier = ">=1.15.2" },
     { name = "scipy-stubs", specifier = ">=1.15.2.0" },
     { name = "seaborn", specifier = ">=0.13.2" },
+    { name = "types-seaborn", specifier = ">=0.13.2.20250111" },
 ]
 
 [[package]]
@@ -799,6 +801,20 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/b3/d2/2190c54d53c04491ad72a1df019c5dfa692e6ab6c2dba1be7b6c9d530e30/types_pytz-2025.1.0.20250204.tar.gz", hash = "sha256:00f750132769f1c65a4f7240bc84f13985b4da774bd17dfbe5d9cd442746bd49", size = 10352 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/be/50/65ffad73746f1d8b15992c030e0fd22965fd5ae2c0206dc28873343b3230/types_pytz-2025.1.0.20250204-py3-none-any.whl", hash = "sha256:32ca4a35430e8b94f6603b35beb7f56c32260ddddd4f4bb305fdf8f92358b87e", size = 10059 },
+]
+
+[[package]]
+name = "types-seaborn"
+version = "0.13.2.20250111"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "matplotlib" },
+    { name = "numpy" },
+    { name = "pandas-stubs" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/23/be/1f66ef93d856dae2500d4cff4cda89edcab9b4f58bbfec23e16fbb4a9f77/types_seaborn-0.13.2.20250111.tar.gz", hash = "sha256:27e557d48614fc0f150d24fc7d4e31957be5cf1432ec7776976005e79413da7d", size = 29124 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/fa/ef/b63c201a2c09dacfe4d0a329f1e8161080d51727c4fe3ca81f7dfc62422e/types_seaborn-0.13.2.20250111-py3-none-any.whl", hash = "sha256:dd7530b9b5218ef7233380eddc70db8ddea08225c808e9580ec9f1daf1fbc688", size = 40853 },
 ]
 
 [[package]]

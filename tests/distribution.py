@@ -3,7 +3,8 @@ This file includes extremely expensive and probabilistic sanity checks.
 It should not be run as part of any automated thing.
 """
 
-from rogue_scroll import Scroll
+from rogue_scroll import Generator
+from rogue_scroll.scroll import SCROLL_PROBS
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -11,20 +12,20 @@ from scipy import stats
 
 
 def scroll_historgram(trials: int = 1000) -> dict[str, int]:
-    hist = {s: 0 for s in Scroll.SCROLLS.keys()}
+    hist = {s: 0 for s in SCROLL_PROBS.keys()}
 
     for _ in range(trials):
-        s = Scroll.choose()
+        s = Generator.kind()
         hist[s] = hist[s] + 1
     return hist
 
 
 class DistData:
     def __init__(self, hist: dict[str, int]) -> None:
-        prob_total = sum(Scroll.SCROLLS.values())
+        prob_total = sum(SCROLL_PROBS.values())
         trials = sum(hist.values())
         multiplier = trials / prob_total
-        expected = {s: p * multiplier for s, p in Scroll.SCROLLS.items()}
+        expected = {s: p * multiplier for s, p in SCROLL_PROBS.items()}
 
         self.data: dict[str, tuple[int, float]] = {
             s: (hist[s], expected[s]) for s in hist
@@ -81,6 +82,7 @@ class DistData:
         )
         g.despine(left=True)
         g.set_axis_labels("Count", "")
+        assert g.legend is not None
         g.legend.set_title("")
 
         return g
@@ -91,8 +93,9 @@ def main() -> None:
     data = DistData(hist)
 
     print(data)
-    p = 1.0 - data.ks()[1]
-    print(f"p-value: {p:.4g}")
+    ks_stat, inv_p = data.ks()
+    p = 1.0 - inv_p
+    print(f"KS-stat: {ks_stat:.2}; p-value: {p:.4g}")
 
     data.plot()
     plt.show()
