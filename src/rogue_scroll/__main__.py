@@ -1,6 +1,6 @@
 """Rogue scroll title generator
 
-This script generates random scroll titles in the style of the
+Generates random scroll titles in the style of the
 game Rogue by Michael Toy, Ken Arnold and Glenn Wichman, originally
 developed in the early 1980s.
 
@@ -8,7 +8,9 @@ Scrolls in the game had titles like
 
     "potrhovbek sunsnefa wunit vlysnebek"
 
-This file can also be imported as a module
+The algorithm used to generate titles and choose a kind of scroll is designed to mimic the generation of scrolls and titles in the game except that this
+program uses a cryptographically secure random number generator instead of the
+linear (affine) congruential generator used in the game.
 """
 
 import sys
@@ -37,7 +39,7 @@ class _CombinedArgParseFormatter(
 def argparser() -> argparse.ArgumentParser:
     """sphinx-argparse wants a function that returns an argparser"""
     parser = argparse.ArgumentParser(
-        prog="rogue_scroll",
+        prog="rogue-scroll",
         formatter_class=_CombinedArgParseFormatter,
         description=__doc__,
         epilog=f"Version {__version__}. {__copyright__}",
