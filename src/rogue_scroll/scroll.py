@@ -227,7 +227,7 @@ class Generator:
 
     @staticmethod
     def count_possibilities(n: int, min: int, max: int) -> int:
-        """:math:`\\sum_{x=min}^{max} n^x`
+        """:math:`\\displaystyle\\sum_{x=\\mathrm{min}}^{\\mathrm{max}} n^x`
 
         Note that this can return 0. Keep that in mind if you wish to
         take the logarithm of the result.

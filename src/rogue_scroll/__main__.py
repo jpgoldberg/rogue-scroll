@@ -36,86 +36,83 @@ class _CombinedArgParseFormatter(
     pass
 
 
-def argparser() -> argparse.ArgumentParser:
-    """sphinx-argparse wants a function that returns an argparser"""
-    parser = argparse.ArgumentParser(
-        prog="rogue-scroll",
-        formatter_class=_CombinedArgParseFormatter,
-        description=__doc__,
-        epilog=f"Version {__version__}. {__copyright__}",
-    )
-    parser.add_argument(
-        "-s",
-        "--min-syllables",
-        type=int,
-        default=Generator.DEFAULT_MIN_S,
-        help="minimum syllables per word",
-    )
-    parser.add_argument(
-        "-S",
-        "--max-syllables",
-        type=int,
-        default=Generator.DEFAULT_MAX_S,
-        help="maximum syllables per word",
-    )
+parser = argparse.ArgumentParser(
+    prog="rogue-scroll",
+    formatter_class=_CombinedArgParseFormatter,
+    description=__doc__,
+    epilog=f"Version {__version__}. {__copyright__}",
+)
+parser.add_argument(
+    "-s",
+    "--min-syllables",
+    type=int,
+    default=Generator.DEFAULT_MIN_S,
+    help="minimum syllables per word",
+)
+parser.add_argument(
+    "-S",
+    "--max-syllables",
+    type=int,
+    default=Generator.DEFAULT_MAX_S,
+    help="maximum syllables per word",
+)
 
-    parser.add_argument(
-        "-w",
-        "--min-words",
-        type=int,
-        default=Generator.DEFAULT_MIN_W,
-        help="minimum words per title",
-    )
-    parser.add_argument(
-        "-W",
-        "--max-words",
-        type=int,
-        default=Generator.DEFAULT_MAX_W,
-        help="maximum words per title",
-    )
-    parser.add_argument(
-        "-n",
-        type=int,
-        default=DEFAULT_N,
-        help="number of scroll titles to generate",
-    )
-    parser.add_argument(
-        "-k",
-        action="store_true",
-        default=DEFAULT_K,
-        help="show kind of scroll",
-    )
-    parser.add_argument(
-        "-K",
-        action="store_true",
-        default=DEFAULT_BIG_K,
-        help="only show kind of scroll",
-    )
-    parser.add_argument(
-        "--entropy", "-H", help="compute entropy", action="store_true"
-    )
-    parser.add_argument(
-        "--version",
-        action="store_true",
-        default=False,
-        help="print version information. Then exit"
-    )
-    parser.add_argument(
-        "--copyright",
-        action="store_true",
-        default=False,
-        help="print version and copyright information. Then exit"
-    )
-    return parser
+parser.add_argument(
+    "-w",
+    "--min-words",
+    type=int,
+    default=Generator.DEFAULT_MIN_W,
+    help="minimum words per title",
+)
+parser.add_argument(
+    "-W",
+    "--max-words",
+    type=int,
+    default=Generator.DEFAULT_MAX_W,
+    help="maximum words per title",
+)
+parser.add_argument(
+    "-n",
+    type=int,
+    default=DEFAULT_N,
+    help="number of scroll titles to generate",
+)
+parser.add_argument(
+    "-k",
+    action="store_true",
+    default=DEFAULT_K,
+    help="show kind of scroll",
+)
+parser.add_argument(
+    "-K",
+    action="store_true",
+    default=DEFAULT_BIG_K,
+    help="only show kind of scroll",
+)
+parser.add_argument(
+    "--entropy", "-H", help="compute entropy", action="store_true"
+)
+parser.add_argument(
+    "--version",
+    action="store_true",
+    default=False,
+    help="print version information. Then exit",
+)
+parser.add_argument(
+    "--copyright",
+    action="store_true",
+    default=False,
+    help="print version and copyright information. Then exit",
+)
 
 
 def main() -> None:
-    args = argparser().parse_args()
+    args = parser.parse_args()
 
     if args.copyright:
         print(f"Version {__version__}. {__copyright__}")
         return
-    
+
     if args.version:
         print(f"Version {__version__}")
         return

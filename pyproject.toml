@@ -43,7 +43,7 @@ Issues = "https://github.com/jpgoldberg/rogue-scroll/issues"
 rogue-scroll = "rogue_scroll.__main__:main"
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-argparse-manpage"]
 build-backend = "hatchling.build"
 
 [tool.hatch.version]
@@ -54,3 +54,8 @@ line-length = 80
 
 [tool.mypy]
 strict = true
+
+# [tool.hatch.build.hooks.argparse-manpage]
+# manpages = [
+#    "man/rogue-scroll.1:function=argparser:pyfile=src/rogue_scroll/__main__.py",
+# ]
