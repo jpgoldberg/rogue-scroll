@@ -1,9 +1,13 @@
 API
 ====
 
-.. autoclass:: rogue_scroll.Scroll
+.. automodule:: rogue_scroll
     :members:
 
-.. autoclass:: rogue_scroll.Generator
-    :members:
 
+
+
+..
+    autodoc can't find doctrings for imported data, so I'm
+    documenting these manually for now.
+    See https://github.com/jpgoldberg/rogue-scroll/issues/1

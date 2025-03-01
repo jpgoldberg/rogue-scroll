@@ -3,12 +3,14 @@ This file includes extremely expensive and probabilistic sanity checks.
 It should not be run as part of any automated thing.
 """
 
-from rogue_scroll import Generator
-from rogue_scroll.scroll import SCROLL_PROBS
+from rogue_scroll import Generator, Constants
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from scipy import stats
+
+
+SCROLL_PROBS = Constants.SCROLL_PROBS
 
 
 def scroll_historgram(trials: int = 1000) -> dict[str, int]:
