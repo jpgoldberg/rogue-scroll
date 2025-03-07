@@ -37,6 +37,7 @@ github_repository = "https://github.com/jpgoldberg/toy-crypto-math"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions: list[str] = [
+    "sphinx.ext.doctest",
     "sphinx_toolbox.more_autodoc.augment_defaults",
     "sphinx.ext.autodoc",
     "sphinx_toolbox.github",

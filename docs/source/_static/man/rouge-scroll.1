@@ -1,0 +1,64 @@
+.TH ROGUE\-SCROLL "1" "2025\-03\-07" "rogue\-scroll" "Generated Python Manual"
+.SH NAME
+rogue\-scroll
+.SH SYNOPSIS
+.B rogue\-scroll
+[-h] [-s MIN_SYLLABLES] [-S MAX_SYLLABLES] [-w MIN_WORDS] [-W MAX_WORDS] [-n N] [-k] [-K] [--entropy] [--version] [--copyright]
+.SH DESCRIPTION
+Rogue scroll title generator
+
+Generates random scroll titles in the style of the
+game Rogue by Michael Toy, Ken Arnold and Glenn Wichman, originally
+developed in the early 1980s.
+
+Scrolls in the game had titles like
+
+    "potrhovbek sunsnefa wunit vlysnebek"
+
+The algorithm used to generate titles and choose a kind of scroll is designed to mimic the generation of scrolls and titles in the game except that this
+program uses a cryptographically secure random number generator instead of the
+linear (affine) congruential generator used in the game.
+
+.SH OPTIONS
+.TP
+\fB\-s\fR \fI\,MIN_SYLLABLES\/\fR, \fB\-\-min\-syllables\fR \fI\,MIN_SYLLABLES\/\fR
+minimum syllables per word
+
+.TP
+\fB\-S\fR \fI\,MAX_SYLLABLES\/\fR, \fB\-\-max\-syllables\fR \fI\,MAX_SYLLABLES\/\fR
+maximum syllables per word
+
+.TP
+\fB\-w\fR \fI\,MIN_WORDS\/\fR, \fB\-\-min\-words\fR \fI\,MIN_WORDS\/\fR
+minimum words per title
+
+.TP
+\fB\-W\fR \fI\,MAX_WORDS\/\fR, \fB\-\-max\-words\fR \fI\,MAX_WORDS\/\fR
+maximum words per title
+
+.TP
+\fB\-n\fR \fI\,N\/\fR
+number of scroll titles to generate
+
+.TP
+\fB\-k\fR
+show kind of scroll
+
+.TP
+\fB\-K\fR
+only show kind of scroll
+
+.TP
+\fB\-\-entropy\fR, \fB\-H\fR
+compute entropy
+
+.TP
+\fB\-\-version\fR
+print version information. Then exit
+
+.TP
+\fB\-\-copyright\fR
+print version and copyright information. Then exit
+
+.SH COMMENTS
+Version 0.1.0. Copyright AgileBits, Inc. 2022; Jeffrey Goldberg 2024–2025
