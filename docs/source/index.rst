@@ -12,6 +12,14 @@ This tool can be used to generate such titles,
 but using a cryptographically secure random number generator
 instead of `the original RNG <https://jpgoldberg.github.io/sec-training/s/rogue-lcg.html>`_.
 
+.. figure:: /images/rogue-now-have-a-scrool.png
+   :alt: rogue screenshot: You now have a scroll called 'lavlyesh wexzimnej robytox'
+   :align: center
+
+   Upon picking up a scroll of some unknown type, user is told the title of
+   of this type of scroll that will be used throughout this instance of the game
+
+
 The `rogue source <https://github.com/Davidslv/rogue/>`_ I am using for the syllables used in scroll titles for the
 default numbers of syllables per word and words per title come from
 the copy of rogue version 5.4.4 source managed
