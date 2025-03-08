@@ -122,3 +122,12 @@ That would yield results with values something like this,
     protect armor           19         20
     monster confusion       69         70
     identify potion         95        100
+
+When that example is fleshed out with more useful reporting and run with 10000 trials we get a result like
+
+.. figure:: /images/kind_distribution.png
+    :align: center
+    :alt: Bar chart showing actual and expected counts of scroll kinds
+
+    Reusts from one run with picking 10,000 scroll kinds. 
+    Kolmorogov-Smirnov test statistic is 0.17.
