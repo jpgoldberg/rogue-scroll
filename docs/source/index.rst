@@ -26,7 +26,7 @@ the copy of rogue version 5.4.4 source managed
 by `David Silva <https://gith ub.com/Davidslv/>`_
 at `<https://github.com/Davidslv/rogue/>`_
 
-This tool also provides a mechanism to pick the kinds of scrolls using the same probability distribution as in [rogue].
+This tool also provides a mechanism to pick the kinds of scrolls using the same probability distribution as in rogue_.
 
 License
 --------

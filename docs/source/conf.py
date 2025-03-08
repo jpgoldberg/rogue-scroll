@@ -45,6 +45,7 @@ extensions: list[str] = [
     "sphinx_toolbox.installation",
     #   "sphinx_toolbox.more_autodoc",
     "sphinx_autodoc_typehints",
+    'sphinx_toolbox.more_autodoc.variables',
     "sphinxarg.ext",
 ]
 
@@ -61,8 +62,6 @@ rst_prolog = f"""
 .. |project| replace:: **{project}**
 .. |root| replace:: :mod:`toy_crypto`
 .. _rogue: https://en.wikipedia.org/wiki/Rogue_(video_game)
-..
-.. |rsource| replace:: `rogue source <https://github.com/Davidslv/rogue/>`_
 """
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output

@@ -144,10 +144,17 @@ class Generator:
     _precomp: _PreComputed | None = None
 
     # Defaults taken from hardcoded values in rogue source.
-    DEFAULT_MIN_S = 1  # Minimum syllables per word
+    DEFAULT_MIN_S = 1  #: Minimum syllables per word
+    """Default minimum syllables per word."""
+
     DEFAULT_MAX_S = 3  # Maximum syllables per word
+    """Default maximum syllables per word."""
+
     DEFAULT_MIN_W = 2  # Minimum words per title
+    """Default minimum words per title."""
+
     DEFAULT_MAX_W = 4  # Maximum words per title
+    """Default maximum words per title."""
 
     _KIND_INDECES: dict[str, int] = {
         k: i for i, k in enumerate(Constants.SCROLL_KINDS)
