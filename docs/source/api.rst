@@ -12,7 +12,7 @@ Note that because output is random, it is a bit tricky to contrive doctests.
 
 .. testcode::
 
-    from rogue_scroll import Generator, Scroll
+    from rogue_scroll import Generator, Scroll, Constants
 
 Entropy computations are not random are a function of the parameters used to create a Generator
 
@@ -56,4 +56,69 @@ That might produce an output such as
     "alapo ninan hyditsne ple" has 4 words
     "erkbublu rhov alala arzeshunelg" has 4 words
 
+We also create scrolls of various kinds using the probability weights from the orginal game.
 
+.. testcode::
+
+    for _ in range(5):
+        k = Generator.random_kind()
+        assert k in Constants.SCROLL_KINDS
+        print(f'a scroll of {k}')
+
+.. testoutput::
+    :hide:
+
+    a scroll of ...
+    a scroll of ...
+    a scroll of ...
+    a scroll of ...
+    a scroll of ...
+
+That would produce an output that looks something like, 
+
+.. code-block:: text
+
+    a scroll of hold monster
+    a scroll of identify ring, wand or staff
+    a scroll of identify ring, wand or staff
+    a scroll of scare monster
+    a scroll of enchant armor
+
+One could check that scroll kinds are picked with a probability corresponding
+to :data:`~rogue_scroll.Constants.SCROLL_PROBS` by building on something like,
+
+.. testcode::
+
+    hist = {s: 0 for s in Constants.SCROLL_PROBS.keys()}
+
+    trials = 1000
+    for _ in range(trials):
+        s = Generator.random_kind()
+        hist[s] = hist[s] + 1
+    
+    # we will just look for a few
+
+    row_format = "{:<20} {:>5} {:>10}"
+    print(row_format.format("Kind", "Count", "Expected"))
+    for k in ['protect armor', 'monster confusion',  'identify potion']:
+        expected = round(Constants.SCROLL_PROBS[k] * trials / 100)
+        count = hist[k]
+        print(row_format.format(k, count, expected))
+
+
+.. testoutput::
+    :hide:
+
+    Kind                 Count   Expected
+    ...
+    ...
+    ...
+
+That would yield results with values something like this,
+
+.. code-block:: text
+
+    Kind                 Count   Expected
+    protect armor           19         20
+    monster confusion       69         70
+    identify potion         95        100

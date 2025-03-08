@@ -131,7 +131,7 @@ def main() -> None:
         if not args.K:
             title = generator.random_title()
         if args.k or args.K:
-            kind = Generator.kind()
+            kind = Generator.random_kind()
         match args.k, args.K:
             case False, False:
                 output = title

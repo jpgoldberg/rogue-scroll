@@ -190,7 +190,7 @@ class Generator:
         return cls._precomp
 
     @classmethod
-    def kind(cls) -> str:
+    def random_kind(cls) -> str:
         """Randomly picks a scroll kind using weighted probabilities."""
 
         # largely lifted from
@@ -239,9 +239,15 @@ class Generator:
             words.append(word)
         return " ".join(words)
 
-    def scroll(self, with_entropy: bool = False) -> Scroll:
+    def random(self, with_entropy: bool = False) -> Scroll:
+        """Generate a random Scroll.
+
+        If :data:`with_entropy` is True, the entropy,
+        computed at generation time, will be included in the :class:`Scroll`.
+        """
+
         title = self.random_title()
-        kind = self.kind()
+        kind = self.random_kind()
         k_idx = self._KIND_INDECES[kind]
         entropy = self.entropy() if with_entropy else None
         return Scroll(title, k_idx, entropy=entropy)

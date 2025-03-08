@@ -17,7 +17,7 @@ def scroll_historgram(trials: int = 1000) -> dict[str, int]:
     hist = {s: 0 for s in SCROLL_PROBS.keys()}
 
     for _ in range(trials):
-        s = Generator.kind()
+        s = Generator.random_kind()
         hist[s] = hist[s] + 1
     return hist
 
