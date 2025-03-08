@@ -3,12 +3,29 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-rogue-scroll documentation
-==========================
+Generate Rogue scroll titles with rogue-scroll
+==============================================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+
+In the game rogue_, the player comes across scrolls with random titles.
+This tool can be used to generate such titles,
+but using a cryptographically secure random number generator
+instead of `the original RNG <https://jpgoldberg.github.io/sec-training/s/rogue-lcg.html>`_.
+
+The `rogue source <https://github.com/Davidslv/rogue/>`_ I am using for the syllables used in scroll titles for the
+default numbers of syllables per word and words per title come from
+the copy of rogue version 5.4.4 source managed
+by `David Silva <https://gith ub.com/Davidslv/>`_
+at `<https://github.com/Davidslv/rogue/>`_
+
+This tool also provides a mechanism to pick the kinds of scrolls using the same probability distribution as in [rogue].
+
+License
+--------
+
+Released under `Creative Commons Attribution-Noderivatives version 4.0 license <https://creativecommons.org/licenses/by-nd/4.0/>`_.
+Copyright AgileBits, Inc. 2022; Jeffrey Goldberg 2024–2025.
+
 
 
 .. toctree::

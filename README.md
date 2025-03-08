@@ -8,7 +8,7 @@ This tool can be used to generate such titles,
 but using a cryptographically secure random number generator
 instead of [the original RNG (PDF)](https://jpgoldberg.github.io/sec-training/s/rogue-lcg.pdf).
 
-The [source][rsrc] I am using for the syllables used in scroll titles for the 
+The [source][rsrc] I am using for the syllables used in scroll titles for the
 default numbers of syllables per word and words per title come from the copy of rogue
 version 5.4.4 source managed by [David Silva](https://github.com/Davidslv/) at
 <https://github.com/Davidslv/rogue/>
