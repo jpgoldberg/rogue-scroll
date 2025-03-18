@@ -156,6 +156,9 @@ class Generator:
     DEFAULT_MAX_W = 4  # Maximum words per title
     """Default maximum words per title."""
 
+    DEFAULT_SEPARATOR = ""
+    """Default separator between syllables."""
+
     _KIND_INDECES: dict[str, int] = {
         k: i for i, k in enumerate(Constants.SCROLL_KINDS)
     }
@@ -166,11 +169,13 @@ class Generator:
         max_syllables: int = DEFAULT_MAX_S,
         min_words: int = DEFAULT_MIN_W,
         max_words: int = DEFAULT_MAX_W,
+        separator: str = DEFAULT_SEPARATOR,
     ) -> None:
         self._s_max = max(min_syllables, max_syllables)
         self._s_min = min_syllables
         self._w_max = max(min_words, max_words)
         self._w_min = min_words
+        self._separator = separator
 
         # Inclusive differences
         self._s_diff = (self._s_max - self._s_min) + 1
@@ -236,12 +241,13 @@ class Generator:
         for w in range(n_words):
             if not fixed_n_syl:
                 n_syllables = secrets.randbelow(self._s_diff) + self._s_min
-            word = ""
+            syllables: list[str] = []
             for s in range(n_syllables):
                 syl = Constants.SYLLABLES[
                     secrets.randbelow(Constants.N_SYLLABLES)
                 ]
-                word += syl
+                syllables.append(syl)
+            word = self._separator.join(syllables)
 
             words.append(word)
         return " ".join(words)

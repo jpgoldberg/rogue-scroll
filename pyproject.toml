@@ -71,6 +71,10 @@ line-length = 80
 [tool.mypy]
 strict = true
 
+[[tool.mypy.overrides]]
+module = ["seaborn.*"]
+ignore_missing_imports = true
+
 # [tool.hatch.build.hooks.argparse-manpage]
 # manpages = [
 #    "man/rogue-scroll.1:function=argparser:pyfile=src/rogue_scroll/__main__.py",
