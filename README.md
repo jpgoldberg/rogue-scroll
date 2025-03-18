@@ -1,7 +1,14 @@
 # Generate Rogue scroll titles
 
+![Tests status](https://github.com/jpgoldberg/rogue=scroll/actions/workflows/pytest.yml/badge.svg)
+[![Documentation](https://github.com/jpgoldberg/rouge-scroll/actions/workflows/docs.yml/badge.svg)][docs]
+[![License: CC by-nd](https://licensebuttons.net/l/by-nd/4.0/80x15.png)](https://creativecommons.org/licenses/by-nd/4.0/)
+
 [rogue]: https://en.wikipedia.org/wiki/Rogue_(video_game) "Wikipedia: Rogue game"
 [rsrc]: https://github.com/Davidslv/rogue/ "GitHub: rogue source"
+[docs]: https://jpgoldberg.github.io/rogue-scroll/index.html
+
+The the [documentation][docs] for more detail.
 
 In the game [rogue], the player comes across scrolls with random titles.
 This tool can be used to generate such titles,
