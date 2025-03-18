@@ -43,6 +43,7 @@ stats = [
 [project.urls]
 Repository = "https://github.com/jpgoldberg/rogue-scroll.git"
 Issues = "https://github.com/jpgoldberg/rogue-scroll/issues"
+Documentation = "https://jpgoldberg.github.io/rogue-scroll/"
 
 
 [project.scripts]
