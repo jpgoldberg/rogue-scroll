@@ -61,6 +61,7 @@ exclude_patterns: list[str] = []
 rst_prolog = f"""
 .. |project| replace:: **{project}**
 .. |root| replace:: :mod:`rogue_scroll`
+.. |cmd| replace:: ``rogue-scroll``
 .. _rogue: https://en.wikipedia.org/wiki/Rogue_(video_game)
 """
 # -- Options for HTML output -------------------------------------------------

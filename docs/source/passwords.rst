@@ -76,7 +76,7 @@ Infrequently typed local passwords
 
 These can include home wifi passwords that you enter into each device just once. Passwords for disk encryption are typically only used when setting up the device or when the disk needs to be attached to a new device.
 
-I am not claiming that these are better suited then many other password generation schemes, but they are fun. Particularly for those of us who spent way too much time playing |rogue|.
+I am not claiming that these are better suited then many other password generation schemes, but they are fun. Particularly for those of us who spent way too much time playing rogue_.
 
 
 
