@@ -1,0 +1,22 @@
+name: mypy
+run-name: ${{ github.actor }} is linting
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '**.py'
+      - 'mypy.ini'
+      - "pyproject.toml"
+
+jobs:
+  type-checking:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: mypy check
+        uses: jpetrucciani/mypy-check@master
+        with:
+          requirements_file: "dev-requirements.txt"
+          python_version: "3.13"
+          path: '.'

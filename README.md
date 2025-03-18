@@ -3,6 +3,7 @@
 ![Tests status](https://github.com/jpgoldberg/rogue-scroll/actions/workflows/pytest.yml/badge.svg)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v0.json)](https://docs.astral.sh/ruff/)
 ![Linting status](https://github.com/jpgoldberg/rogue-scroll/actions/workflows/lint.yml/badge.svg)
+![Type check status](https://github.com/jpgoldberg/rogue-scroll/actions/workflows/types.yml/badge.svg)
 [![Documentation](https://github.com/jpgoldberg/rogue-scroll/actions/workflows/docs.yml/badge.svg)][docs]
 [![License: "CC-BY-ND-4.0](https://licensebuttons.net/l/by-nd/4.0/80x15.png)](https://creativecommons.org/licenses/by-nd/4.0/)
 
