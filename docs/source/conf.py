@@ -30,7 +30,7 @@ author = ",".join([author["name"] for author in pyproject["authors"]])
 copyright = __about__.__copyright__
 
 github_username = "jpgoldberg"
-github_repository = "https://github.com/jpgoldberg/toy-crypto-math"
+github_repository = "rogue-scroll"
 
 
 # -- General configuration ---------------------------------------------------
@@ -60,7 +60,7 @@ exclude_patterns: list[str] = []
 
 rst_prolog = f"""
 .. |project| replace:: **{project}**
-.. |root| replace:: :mod:`toy_crypto`
+.. |root| replace:: :mod:`rogue_scroll`
 .. _rogue: https://en.wikipedia.org/wiki/Rogue_(video_game)
 """
 # -- Options for HTML output -------------------------------------------------

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- Documentation about use as a password generator.
+
+- [Documentation][docs] points to [release on PyPi](https://pypi.org/project/rogue-scroll/)
+
 ## 0.1.1 - 2025-03-17
 
 ### Added

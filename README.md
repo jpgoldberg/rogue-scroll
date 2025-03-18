@@ -1,5 +1,6 @@
 # Generate Rogue scroll titles
 
+[![PyPI](https://img.shields.io/pypi/v/rogue-scroll?label=pypi%20package)](https://pypi.org/project/rogue-scroll/)
 ![Tests status](https://github.com/jpgoldberg/rogue-scroll/actions/workflows/pytest.yml/badge.svg)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v0.json)](https://docs.astral.sh/ruff/)
 ![Linting status](https://github.com/jpgoldberg/rogue-scroll/actions/workflows/lint.yml/badge.svg)

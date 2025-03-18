@@ -28,6 +28,14 @@ at `<https://github.com/Davidslv/rogue/>`_
 
 This tool also provides a mechanism to pick the kinds of scrolls using the same probability distribution as in rogue_.
 
+Installation
+--------------
+
+.. installation:: rogue-scroll
+   :pypi:
+   :github:
+
+
 License
 --------
 
@@ -42,4 +50,5 @@ Copyright AgileBits, Inc. 2022; Jeffrey Goldberg 2024–2025.
 
    cmd
    api
+   passwords
 
