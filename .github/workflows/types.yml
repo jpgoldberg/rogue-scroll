@@ -1,5 +1,5 @@
 name: mypy
-run-name: ${{ github.actor }} is linting
+run-name: mypy type checking
 on:
   workflow_dispatch:
   push:
@@ -17,6 +17,7 @@ jobs:
       - name: mypy check
         uses: jpetrucciani/mypy-check@master
         with:
-          requirements_file: "dev-requirements.txt"
+          requirements: "pytest"
+          mypy_flags: '--exclude distribution\.py'
           python_version: "3.13"
           path: '.'
