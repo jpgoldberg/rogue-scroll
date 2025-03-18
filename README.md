@@ -11,12 +11,13 @@
 [rsrc]: https://github.com/Davidslv/rogue/ "GitHub: rogue source"
 [docs]: https://jpgoldberg.github.io/rogue-scroll/ "rogue-scroll documentation"
 
-The the [documentation][docs] for more detail.
+See the [documentation][docs] for more detail.
 
 In the game [rogue], the player comes across scrolls with random titles.
 This tool can be used to generate such titles,
 but using a cryptographically secure random number generator
-instead of [the original RNG (PDF)](https://jpgoldberg.github.io/sec-training/s/rogue-lcg.pdf).
+instead of
+[the original RNG](https://jpgoldberg.github.io/sec-training/s/rogue-lcg.html).
 
 The [source][rsrc] I am using for the syllables used in scroll titles for the
 default numbers of syllables per word and words per title come from the copy of rogue

@@ -45,7 +45,7 @@ extensions: list[str] = [
     "sphinx_toolbox.installation",
     #   "sphinx_toolbox.more_autodoc",
     "sphinx_autodoc_typehints",
-    'sphinx_toolbox.more_autodoc.variables',
+    "sphinx_toolbox.more_autodoc.variables",
     "sphinxarg.ext",
 ]
 
