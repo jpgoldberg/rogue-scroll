@@ -9,18 +9,20 @@ but they are practical only for limited circumstances.
 Secure
 ========
 
-Generated scroll titles are almost [#prefix]_ *uniformly distributed*,
-and they are generated using a cryptographgically secure random number generator.
+With appropriate settings (see :ref:`prefix`) scroll titles are
+*uniformly distributed*,
+and they are generated using a
+cryptographgically secure random number generator.
 Under these assumptions we can compute the entropy of the generator given specific parameters.
 
-With three syllables per word and four words, a generated title has more than 86 bits of entropy.
+With three syllables per word and four words,
+a generated title has more than 86 bits of entropy.
 For example at the command line,
 
 .. code:: console
 
-    $ rogue-scroll -s3 -S3 -w4 -W4 -H
-    engsunfid proksnoel taudan connihoxy
-    86.39606813803637
+    $ rogue-scroll -s3 -S3 -w4 -W4 -d- -H 
+    ing-vly-rhov whon-mic-eng vly-bot-bie dalf-u-arze
 
 or though the module
 
@@ -30,7 +32,8 @@ or though the module
 
     g = Generator(
             min_words = 4, max_words = 4,
-            min_syllables=3, max_syllables=3
+            min_syllables=3, max_syllables=3,
+            separator='-',
         )
     new_pwd = g.random_title()
     H = g.entropy()
@@ -77,10 +80,4 @@ Infrequently typed local passwords
 These can include home wifi passwords that you enter into each device just once. Passwords for disk encryption are typically only used when setting up the device or when the disk needs to be attached to a new device.
 
 I am not claiming that these are better suited then many other password generation schemes, but they are fun. Particularly for those of us who spent way too much time playing rogue_.
-
-
-
-.. rubric:: Footnotes
-
-.. [#prefix] In some cases there may be multiple ways to generate the same title word. Consider the two syllable word "``abit``". That could have been generated as either "``a``" + "``bit``" or as "``ab``" + "``it``". As a consequence entropy calculations are high by an amount I am too lazy to compute. 
 

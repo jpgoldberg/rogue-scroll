@@ -110,6 +110,10 @@ Here we see that calculation for five syllables per word and five words per titl
     $ rogue-scroll -W5 -S5 -n0 -H
     180.04104755060663
 
+.. warning::
+
+    Entropy computation can be higher than true value. See :ref:`prefix` for details.
+
 Kinds of scrolls (``-k``, ``-K``)
 ----------------------------------
 
@@ -144,13 +148,21 @@ Titles will not be generated.
     monster confusion
 
 
+.. _d_option:
 
+Syllable divider (``-d``, `--syllable-divider`)
+--------------------------------------------------
 
+By default there is no separator between syllables
+in title words.
+That is fine except that it can result in incorrect entropy
+computation, as there may be multiple ways a particular title workd could be generated.
+See :ref:`prefix` for details.
 
+So for some usages we may want to set a separator character,
+such as “``-``”.
 
+.. code:: console
 
-
-
-
-
-
+    $ rogue-scroll -d+
+    shu+re plu wun+it

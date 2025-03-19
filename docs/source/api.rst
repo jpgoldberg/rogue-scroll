@@ -1,12 +1,24 @@
 API
-====
+****
+
+The |root| module
+===================
 
 .. automodule:: rogue_scroll
     :members:
 
+.. _prefix:
+
+Warning: Amgiguous titles and entropy
+--------------------------------------
+
+Reported entropy will be higher than the true value under default settings.
+This is because in some cases there may be multiple ways to generate the same title word. Consider the two syllable word "``abit``". That could have been generated as either "``a``" + "``bit``" or as "``ab``" + "``it``".
+
+Use :option:`--syllable-divider` (:option:`-d`) with the |cmd| command or specify the ``separator`` parameter when calling :class:`Generator` to something that is not a letter or a space.
 
 Examples
---------
+=========
 
 Note that because output is random, it is a bit tricky to contrive doctests.
 
@@ -131,3 +143,4 @@ When that example is fleshed out with more useful reporting and run with 10000 t
 
     Reusts from one run with picking 10,000 scroll kinds. 
     Kolmorogov-Smirnov test statistic is 0.17.
+

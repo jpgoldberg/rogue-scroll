@@ -92,6 +92,15 @@ parser.add_argument(
 parser.add_argument(
     "--entropy", "-H", help="compute entropy", action="store_true"
 )
+
+parser.add_argument(
+    "--syllable-divider",
+    "-d",
+    help="syllable separator within title words",
+    type=str,
+    default=Generator.DEFAULT_SEPARATOR,
+)
+
 parser.add_argument(
     "--version",
     action="store_true",
@@ -121,7 +130,11 @@ def main() -> None:
         raise ValueError(f"You owe me {-args.n} scroll titles.")
 
     generator = Generator(
-        args.min_syllables, args.max_syllables, args.min_words, args.max_words
+        min_syllables=args.min_syllables,
+        max_syllables=args.max_syllables,
+        min_words=args.min_words,
+        max_words=args.max_words,
+        separator=args.syllable_divider,
     )
 
     for _ in range(args.n):
