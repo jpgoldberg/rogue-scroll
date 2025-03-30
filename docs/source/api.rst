@@ -9,7 +9,7 @@ The |root| module
 
 .. _prefix:
 
-Warning: Amgiguous titles and entropy
+Warning: Ambiguous titles and entropy
 --------------------------------------
 
 Reported entropy will be higher than the true value under default settings.
