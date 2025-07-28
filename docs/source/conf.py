@@ -10,12 +10,18 @@ import os
 import sys
 import tomllib
 
+# Workaround for https://github.com/sphinx-toolbox/sphinx-toolbox/issues/190
+# taken from https://github.com/canonical/imagecraft/pull/181/commits/d8bab5d434759bac17861ae3529e55e1a84c2ef5
+import sphinx_prompt  # type: ignore[import-not-found]
+
+sys.modules["sphinx-prompt"] = sphinx_prompt
+
 sys.path.insert(0, os.path.abspath("."))
 sys.path.insert(0, os.path.abspath("../../src"))
 
 import rogue_scroll  # noqa
 
-from rogue_scroll import __about__
+from rogue_scroll import __about__  # noqa
 
 # Pull general sphinx project info from pyproject.toml
 # Modified from https://stackoverflow.com/a/75396624/1304076
@@ -62,6 +68,7 @@ rst_prolog = f"""
 .. |project| replace:: **{project}**
 .. |root| replace:: :mod:`rogue_scroll`
 .. |cmd| replace:: ``rogue-scroll``
+.. |version| replace:: {release}
 .. _rogue: https://en.wikipedia.org/wiki/Rogue_(video_game)
 """
 # -- Options for HTML output -------------------------------------------------

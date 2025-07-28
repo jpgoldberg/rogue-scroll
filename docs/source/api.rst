@@ -15,7 +15,7 @@ Warning: Ambiguous titles and entropy
 Reported entropy will be higher than the true value under default settings.
 This is because in some cases there may be multiple ways to generate the same title word. Consider the two syllable word "``abit``". That could have been generated as either "``a``" + "``bit``" or as "``ab``" + "``it``".
 
-Use :option:`--syllable-divider` (:option:`-d`) with the |cmd| command or specify the ``separator`` parameter when calling :class:`Generator` to something that is not a letter or a space.
+Use ``--syllable-divider`` (``-d``) with the |cmd| command or specify the ``separator`` parameter when calling :class:`Generator` to something that is not a letter or a space.
 
 Examples
 =========

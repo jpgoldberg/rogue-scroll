@@ -6,7 +6,7 @@ The question naturally (well, for some of us) arises whether |project| is suitab
 The short answer is yes for security (with the right settings), 
 but they are practical only for limited circumstances.
 
-Secure
+Security
 ========
 
 With appropriate settings (see :ref:`prefix`) scroll titles are

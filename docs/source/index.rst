@@ -12,7 +12,7 @@ This tool can be used to generate such titles,
 but using a cryptographically secure random number generator
 instead of `the original RNG <https://jpgoldberg.github.io/sec-training/s/rogue-lcg.html>`_.
 
-.. figure:: /images/rogue-now-have-a-scrool.png
+.. figure:: /images/rogue-now-have-a-scroll.png
    :alt: rogue screenshot: You now have a scroll called 'lavlyesh wexzimnej robytox'
    :align: center
 
@@ -33,7 +33,7 @@ Installation
 
 .. installation:: rogue-scroll
    :pypi:
-   :github:
+   :github: main
 
 
 License
@@ -42,7 +42,11 @@ License
 Released under `Creative Commons Attribution-Noderivatives version 4.0 license <https://creativecommons.org/licenses/by-nd/4.0/>`_.
 Copyright AgileBits, Inc. 2022; Jeffrey Goldberg 2024–2025.
 
+The reason for the "no derivatives" restriction is that I have been granted certain rights to continue to develop a specific set of material under AgileBits copyright, but there are limitations on my right to transfer some of those rights.
 
+
+Table of Contents
+-----------------
 
 .. toctree::
    :maxdepth: 2
