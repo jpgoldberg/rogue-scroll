@@ -51,6 +51,42 @@ That sample code also serves as a reminder
 that entropy is not a function of the generated password
 but is a function of the generator.
 
+Messy entropy computation
+--------------------------
+
+This does not impact that user, but I wish to point out that the entropy computation is not nearly as simple or straightforward as it would be for
+something designed as a password generator.
+
+It is easy to compute entropy when we have a fixed number of words,
+but once we allow the generator to produce a variable number of words,
+it gets harder.
+
+For example, if you had a word list containing exactly 10,000 words and generated passwords by picking four words independently, the entropy would be:
+
+.. math::
+
+    H = 4 \times \log_2(10{,}000) \approx 53.2 \text{ bits}
+
+More generally if *W* is the number of words in the word list,
+and *N* is the number of words in the password,
+the entropy, *H*, is:
+
+.. math::
+
+    H = N \times \log_2(W)
+
+But with variable numbers of words and syllables, the entropy calculation must account for all possible combinations, which is more complex than simply multiplying the number of choices per word.
+Scroll titles in rogue_ could be 2, 3, or 4 words long,
+and each word could have 1, 2, or 3 syllables.
+
+The result of all this is that I have code that I am not happy with,
+:meth:`~rogue_scroll.Generator.count_possibilities`,
+used in entropy computations.
+This is a consequence of enabling something that was never designed
+to be a password generator work as one.
+You might not be bothered by that, but I am.
+
+
 Practicality
 ==============
 
