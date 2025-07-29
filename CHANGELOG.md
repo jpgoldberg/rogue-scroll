@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 0.1.3 - 2025-07-29
+
+### Improved
+
+- Documentation
+  - Fuller discussion of uses a a password generator.
+  - Branch name now correct in github installation instructions.
+  - Work around [bug](https://github.com/sphinx-toolbox/sphinx-toolbox/issues/190) installation instruction generation.
+  - A few typos fixed.
+
 ## 0.1.2 – 2025-03-19
 
 ### Added
